@@ -1,0 +1,55 @@
+@using System.Web
+@using System.Text.RegularExpressions;
+
+@{
+	var showClass = IsVisible ? "d-block" : "d-none";
+}
+
+<div class="modal @showClass" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">@HeaderText</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>
+					@((MarkupString)Regex.Replace(@BodyText + "", "\n", "<br />"))
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="Close">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public bool IsVisible { get; set; }
+
+	[Parameter]
+	public EventCallback<bool> IsVisibleChanged { get; set; }
+
+	[Parameter]
+	public string? HeaderText { get; set; }
+
+	[Parameter]
+	public string? BodyText { get; set; }
+
+	public void Show(string bodyText, string headerText = "")
+	{
+		HeaderText = headerText;
+		BodyText = bodyText;
+		IsVisible = true;
+		StateHasChanged();
+	}
+
+	private void Close()
+	{
+		HeaderText = string.Empty;
+		BodyText = string.Empty;
+		IsVisible = false;
+		StateHasChanged();
+	}
+}

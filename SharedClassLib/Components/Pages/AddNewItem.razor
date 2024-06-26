@@ -1,0 +1,114 @@
+@page "/manager/addNewItem"
+@inject DataController dataController
+@inject NavigationManager navigationManager
+
+<PageTitle>Add New Item</PageTitle>
+
+<div class="flex-row mb-3">
+	<h1 class="m-0 me-3">Add New Item</h1>
+</div>
+
+<div class="flex-col my-3 input-block">
+	<label class="mb-3">
+		Name:
+		<InputText @bind-Value="item.Name" />
+	</label>
+
+	<div>
+		<label>
+			Width:
+			<input type="number" @bind-value="@item.Width" id="wInput"
+				oninput="let inp = document.querySelector('#wInput');inp.value = inp.value < @minSize ? @minSize : inp.value > @maxSize ? @maxSize : inp.value;" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minSize m; Max - @maxSize m;
+	</div>
+
+	<div>
+		<label>
+			Height:
+			<input type="number" @bind-value="@item.Height" id="hInput"
+				oninput="let inp = document.querySelector('#hInput');inp.value = inp.value < @minSize ? @minSize : inp.value > @maxSize ? @maxSize : inp.value;" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minSize m; Max - @maxSize m;
+	</div>
+
+	<div>
+		<label>
+			Length:
+			<input type="number" @bind-value="@item.Length" id="lInput"
+				oninput="let inp = document.querySelector('#lInput');inp.value = inp.value < @minSize ? @minSize : inp.value > @maxSize ? @maxSize : inp.value;" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minSize m; Max - @maxSize m;
+	</div>
+
+	<div>
+		<label>
+			Max water pressure:
+			<input type="number" @bind-value="@item.MaxWaterPressure" id="mwpInput"
+				oninput="let inp = document.querySelector('#mwpInput');inp.value = inp.value < @minPressure ? @minPressure : inp.value > @maxPressure ? @maxPressure : inp.value;" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minPressure Pa; Max - @maxPressure Pa;
+	</div>
+
+	<label class="mb-3">
+		Engine type:
+		<InputText @bind-Value="item.EngineType" />
+	</label>
+
+	<div>
+		<label>
+			Price:
+			<input type="number" @bind-value="@item.Price" id="pInput"
+				oninput="let inp = document.querySelector('#pInput');inp.value = inp.value < @minPrice ? @minPrice : inp.value > @maxPrice ? @maxPrice : inp.value;" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minPrice $; Max - @maxPriceStr $;
+	</div>
+</div>
+
+<div class="flex-row my-3">
+	<a class="btn btn-primary" @onclick="AddItem">Add Item</a>
+	<a class="btn btn-danger ms-3" href="manager">
+		Cancel
+	</a>
+</div>
+
+@code {
+	private int minSize = 1;
+	private int maxSize = 10_000;
+
+	private int minPressure = 1;
+	private int maxPressure = 10_000;
+
+	private double minPrice = 1;
+	private double maxPrice = 20_000_000_000;
+	private string maxPriceStr = "";
+
+	protected override void OnInitialized()
+	{
+		maxPriceStr = maxPrice.ToString("N");
+	}
+
+	private Submarine item = new(1, 1, 1, 1, "", 1, " ");
+
+	private void AddItem()
+	{
+		dataController.AddSubmarine(item);
+
+		NavigateToManager();
+	}
+
+	private void NavigateToManager()
+	{
+		navigationManager.NavigateTo("manager");
+	}
+}

@@ -1,0 +1,68 @@
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.input-block label {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
+  /* margin-bottom: 1rem; */
+}
+
+.input-block input {
+  margin-left: 0.5rem;
+  width: 100%;
+}
+
+.col-max-size {
+  max-width: 100px;
+  word-wrap: break-word;
+}
+
+.col-min-size {
+  min-width: 100px;
+  word-wrap: break-word;
+}
+
+td.min,
+th.min {
+  width: 184px !important;
+  /*white-space: nowrap !important;*/
+}
+
+.page-number {
+  margin: 0 0.5rem;
+  text-align: center;
+  width: 50px;
+}
+
+/* Hide input arrows upd and down */
+/* For Chrome, Safari, Edge, and Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.valid-text {
+  color: grey;
+  font-size: 14px;
+}
+
+.small-text {
+  color: grey;
+  font-size: 14px;
+  position: absolute;
+  right: 5%;
+}

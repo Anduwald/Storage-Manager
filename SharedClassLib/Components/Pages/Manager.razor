@@ -1,0 +1,172 @@
+﻿@using SharedClassLib.Data
+@using SharedClassLib.Components.Pages.Modals
+@page "/manager"
+@inject DataController dataController
+@inject NavigationManager navigationManager
+@inject AppState appState
+
+<MoreModal @ref="moreModalRef" />
+
+<PageTitle>Manager</PageTitle>
+
+<h1>Manager</h1>
+
+<p>On that page you can see and edit shop storage.</p>
+
+<div class="d-flex justify-content-end">
+	<button class="btn btn-primary me-3" @onclick="NavigateToAddNewItem">Add new item</button>
+	<button type="button" class="btn btn-primary me-3" @onclick="ImportDataFromFile">
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
+			<path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+		</svg>
+		Upload
+	</button>
+	<button type="button" class="btn btn-primary" @onclick="ExportDataToFile">
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z" />
+			<path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z" />
+		</svg>
+		Save
+	</button>
+</div>
+
+@if (dataController.Submarines.Count <=0)
+{
+	<p><em>Table is Empty. <br /> Add new item first!</em></p>
+}
+else
+{
+	<table class="table manager-table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th class="col-max-size">Name</th>
+				<th class="col-max-size" style="white-space: nowrap">Engine type</th>
+				<th>Price</th>
+				<th class="min">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (int i = 0 + ((currentPage - 1) * linesPerPage); i < (currentPage * linesPerPage); i++)
+			{
+
+				if (i >= dataController.Submarines.Count) break;
+				submarine = dataController.Submarines[i];
+
+				<tr>
+					<td style="white-space: nowrap; width:1%;">@(i + 1)</td>
+					<td class="col-max-size">@submarine.Name</td>
+					<td class="col-max-size">@submarine.EngineType</td>
+					<td style="white-space: nowrap">@submarine.Price.ToString("N") $</td>
+					<td class="min">
+						<button class="btn btn-primary btn-sm me-1 mb-1" @onclick="()=>NavigateToEditItem(submarine.Id)">Edit</button>
+						<button class="btn btn-secondary btn-sm me-1 mb-1" @onclick="()=>ShowModalMore(submarine.Id)">More</button>
+						<button class="btn btn-danger btn-sm" @onclick="()=>DeleteItem(submarine.Id)">Delete</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<div class="d-flex justify-content-center align-items-center">
+		<button type="button" class="btn btn-outline-dark btn-sm" @onclick="DecreaseCPage">&lt; Prev</button>
+		<input type="number" id="cPageInput" class="page-number" @bind-value="@currentPage" oninput="let cPageI = document.querySelector('#cPageInput'); cPageI.value = cPageI.value < 1?1:cPageI.value>@pageCount?@pageCount:cPageI.value">
+		<button type="button" class="btn btn-outline-dark btn-sm" @onclick="IncreaseCPage">Next &gt;</button>
+	<div class="small-text">Total items: @dataController.Submarines.Count</div>
+	</div>
+}
+
+@code {
+	Submarine submarine = null;
+
+	private string filePath = "";
+	private MoreModal moreModalRef = new();
+
+	private int linesPerPage = 10;
+	private int pageCount = 1;
+	private int currentPage = 1;
+
+	protected override void OnInitialized()
+	{
+		CountPages();
+		currentPage = ValidateCPage(appState.remberPage);
+	}
+
+	private void CountPages()
+	{
+		pageCount = (int)Math.Ceiling(dataController.Submarines.Count / (double)linesPerPage);
+	}
+
+	private int ValidateCPage(int value)
+	{
+		if (value <= 0) return 1;
+		if (value > pageCount) return pageCount;
+
+		return value;
+	}
+
+	private void IncreaseCPage()
+	{	
+		currentPage++;
+		currentPage = ValidateCPage(currentPage);
+	}
+
+	private void DecreaseCPage()
+	{
+		currentPage--;
+		currentPage = ValidateCPage(currentPage);
+	}
+
+	private void ShowModalMessage()
+	{
+		moreModalRef.Show("Popup body text");
+	}
+
+	private void ShowModalMore(int id)
+	{
+		Submarine submarine = dataController.Submarines.Single(e => e.Id == id);
+		string modalBody = submarine.GetDataStr();
+		string modalTitle = $"Submarine - {submarine.Name}";
+		moreModalRef.Show(modalBody, modalTitle);
+	}
+
+	private void ImportDataFromFile()
+	{
+		filePath = dataController.ShowDialogFileRef();
+		if (filePath == null || filePath == "") return;
+
+		string jsonString = FileManager.LoadData(filePath);
+
+		dataController.ImportDataFromJson(jsonString);
+		CountPages();
+	}
+
+	private void ExportDataToFile()
+	{
+		filePath = dataController.ShowDialogFolderRef();
+		if (filePath == null || filePath == "") return;
+		string jsonString = dataController.ExportDataToJson();
+
+		FileManager.SaveData(filePath, jsonString);
+	}
+
+	private void DeleteItem(int id)
+	{
+		dataController.DeleteSubmarine(id);
+		CountPages();
+	}
+
+	private void NavigateToAddNewItem()
+	{
+		appState.remberPage = currentPage;
+		navigationManager.NavigateTo("manager/addNewItem");
+	}
+
+	private void NavigateToEditItem(int id)
+	{
+		appState.remberPage = currentPage;
+		navigationManager.NavigateTo($"manager/editItem/{id}");
+	}
+
+}
