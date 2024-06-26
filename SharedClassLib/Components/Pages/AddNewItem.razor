@@ -83,22 +83,22 @@
 </div>
 
 @code {
-	private int minSize = 1;
-	private int maxSize = 10_000;
+	private Submarine item = new();
 
-	private int minPressure = 1;
-	private int maxPressure = 10_000;
+	private int minSize = AppState.MinSize;
+	private int maxSize = AppState.MaxSize;
 
-	private double minPrice = 1;
-	private double maxPrice = 20_000_000_000;
-	private string maxPriceStr = "";
+	private int minPressure = AppState.MinPressure;
+	private int maxPressure = AppState.MaxPressure;
+
+	private double minPrice = AppState.MinPrice;
+	private double maxPrice = AppState.MaxPrice;
+	private string maxPriceStr = AppState.MaxPrice.ToString("N");
 
 	protected override void OnInitialized()
 	{
-		maxPriceStr = maxPrice.ToString("N");
+		item = new(minSize, minSize, minSize, minPressure, "", minPrice, " ");
 	}
-
-	private Submarine item = new(1, 1, 1, 1, "", 1, " ");
 
 	private void AddItem()
 	{

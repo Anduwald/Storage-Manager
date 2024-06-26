@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 using SharedClassLib;
-using SharedClassLib.Components;
 using SharedClassLib.Data;
-using System;
+using System.Windows.Forms;
 
 namespace StorageManager
 {
@@ -25,7 +24,6 @@ namespace StorageManager
 			dataController.ShowDialogFileRef = SelectFileWindow;
 
 			services.AddSingleton(dataController);
-			services.AddSingleton<AppState>();
 
 			blazorWebView1.HostPage = "wwwroot\\index.html";
 			blazorWebView1.Services = services.BuildServiceProvider();

@@ -47,7 +47,8 @@
 			// 
 			// openFileDialog1
 			// 
-			openFileDialog1.FileName = "openFileDialog1";
+			openFileDialog1.FileName = "ApplicationData";
+			openFileDialog1.Filter = "Json File |*.json;";
 			// 
 			// saveFileDialog1
 			// 

@@ -32,7 +32,7 @@ namespace SharedClassLib.Data
 			int index = submarines.FindIndex(e => e.Id == Id);
 
 			if (index != -1)
-				submarines[index] = submarine;
+				submarines[index] = new(submarine);
 		}
 
 		private void UpdateSubmarinesId()
@@ -47,7 +47,17 @@ namespace SharedClassLib.Data
 		{
 			if (jsonString == null || jsonString == "") return false;
 
-			DataController temp = JsonSerializer.Deserialize<DataController>(jsonString);
+			DataController temp;
+
+			try
+			{
+				temp = JsonSerializer.Deserialize<DataController>(jsonString);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				return false;
+			}
 
 			if (temp == null) return false;
 
@@ -75,10 +85,24 @@ namespace SharedClassLib.Data
 		protected double price;
 		protected string name;
 
+		protected Product()
+		{
+			this.price = 0;
+			this.name = "";
+			this.id = -1;
+		}
+
 		public Product(double price, string name)
 		{
 			this.price = price;
 			this.name = name;
+		}
+
+		protected Product(Product product)
+		{
+			this.price = product.price;
+			this.name = product.name;
+			this.id = product.id;
 		}
 
 		public int Id
@@ -108,6 +132,15 @@ namespace SharedClassLib.Data
 		private float maxWaterPressure;
 		private string engineType;
 
+		public Submarine() : base()
+		{
+			this.width = 0;
+			this.height = 0;
+			this.length = 0;
+			this.maxWaterPressure = 0;
+			this.engineType = "";
+		}
+
 		public Submarine(float width, float height, float length, float maxWaterPressure, string engineType, double price, string name) : base(price, name)
 		{
 			this.width = width;
@@ -117,18 +150,18 @@ namespace SharedClassLib.Data
 			this.engineType = engineType;
 		}
 
-		public void CopyValuesFrom(Submarine submarine)
+		public Submarine(Submarine submarine) : base(submarine)
 		{
-			this.id = submarine.id;
 			this.width = submarine.width;
 			this.height = submarine.height;
 			this.length = submarine.length;
 			this.maxWaterPressure = submarine.maxWaterPressure;
 			this.engineType = submarine.engineType;
 			this.price = submarine.price;
-			this.name = submarine.name;	
+			this.name = submarine.name;
+			this.id = submarine.id;
 		}
-
+		
 		public float Width
 		{
 			get { return width; }

@@ -1,4 +1,4 @@
-@page "/manager/editItem/{Id}"
+@page "/manager/editItem/{Id::int}"
 @inject DataController dataController
 @inject NavigationManager navigationManager
 
@@ -84,34 +84,30 @@
 
 @code {
 	[Parameter]
-	public string Id { get; set; } = "0";
+	public int Id { get; set; } = -1;
 
-	private Submarine item = new(0, 0, 0, 0, "", 0, " ");
+	private Submarine item = new();
 
-	private int minSize = 1;
-	private int maxSize = 10_000;
+	private int minSize = AppState.MinSize;
+	private int maxSize = AppState.MaxSize;
 
-	private int minPressure = 1;
-	private int maxPressure = 10_000;
+	private int minPressure = AppState.MinPressure;
+	private int maxPressure = AppState.MaxPressure;
 
-	private int minPrice = 1;
-	private int maxPrice = 1_000_000_000;
-	private string maxPriceStr = "";
+	private double minPrice = AppState.MinPrice;
+	private double maxPrice = AppState.MaxPrice;
+	private string maxPriceStr = AppState.MaxPrice.ToString("N");
 
 	protected override void OnInitialized()
 	{
-		int subId = 0;
-		if (!int.TryParse(Id, out subId)) return;
-
-		Submarine temp = dataController.Submarines.Single(e => e.Id == subId);
-		item.CopyValuesFrom(temp);
+		maxPriceStr = maxPrice.ToString("N");
+		Submarine temp = dataController.Submarines.Single(e => e.Id == Id);
+		item = new(temp);
 	}
 
 	private void SaveItem()
 	{
-		int index = 0;
-		if (!int.TryParse(Id, out index)) return;
-		dataController.UpdateSubmarine(index, item);
+		dataController.UpdateSubmarine(Id, item);
 
 		NavigateToManager();
 	}

@@ -5,7 +5,6 @@
 		private static string programFolderPath = AppDomain.CurrentDomain.BaseDirectory;
 		private static string fileName = "AppData";
 
-
 		public static void SaveData(string dataJson)
 		{
 			string filePath = System.IO.Path.Combine(programFolderPath, $"{fileName}.json");
@@ -30,17 +29,27 @@
 		{
 			if (File.Exists(filePath))
 			{
-				// load the serialized data from the file
 				string dataToLoad = "";
-				using (FileStream stream = new(filePath, FileMode.Open))
+
+				try
 				{
-					using StreamReader reader = new(stream);
-					dataToLoad = reader.ReadToEnd();
+					// load the serialized data from the file
+					using (FileStream stream = new(filePath, FileMode.Open))
+					{
+						using StreamReader reader = new(stream);
+						dataToLoad = reader.ReadToEnd();
+					}
+
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					return "Error - " + ex.Message;
 				}
 
 				return dataToLoad;
 			}
-			return "";
+			return "File not found";
 		}
 	}
 }

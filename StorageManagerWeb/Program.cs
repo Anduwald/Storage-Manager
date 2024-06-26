@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataController>();
-builder.Services.AddSingleton<AppState>();
 
 var app = builder.Build();
 

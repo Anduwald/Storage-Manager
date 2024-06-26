@@ -3,18 +3,83 @@
 <PageTitle>Help</PageTitle>
 
 <h1>Help</h1>
-
 <h3>How to use?</h3>
+<h5>Items interactions</h5>
 
-<h5>Products (items) interactions</h5>
-<ul>
-  <li>If there are no items - press button "Add new item". <br>If item already exist - use buttons "Edit", "More",
-    "Delete".</li>
-  <li>After pressing buttons "Add new item" or "Edit", a page with input fields will be displayed. <br>Under each field
-    will be shown range for value (auto-validation is active, entering value out of range would be automatically
-    corrected).</li>
-  <li>After entering values press button "Add item" or "Save". <br>New/changed item will appear in the table.</li>
-  <li>To get more infromation about item press "More". <br>Pop-up with all information will appear.</li>
-</ul>
+<div class="accordion accordion-flush" id="productsAccordion">
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#flush-prodOne" aria-expanded="false" aria-controls="flush-prodOne">
+				How to add new item?
+			</button>
+		</h2>
+		<div id="flush-prodOne" class="accordion-collapse collapse" data-bs-parent="#productsAccordion">
+			<div class="accordion-body">
+				If there are no table - press button "Add new item" to create a table and add a first row.
+				<br />If table already exist - press button "Add new item" to add a new row.
+				<br />When you will enter new values for item they would be auto-corrected accordind to the value range under each input field.
+			</div>
+		</div>
+	</div>
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#flush-prodTwo" aria-expanded="false" aria-controls="flush-prodTwo">
+				How to save current progress?
+			</button>
+		</h2>
+		<div id="flush-prodTwo" class="accordion-collapse collapse" data-bs-parent="#productsAccordion">
+			<div class="accordion-body">
+				Don't worry. All the changes are automatically saved to AppData.json.
+				<br /><p class="text-danger">Attention!</p> AppData.json is a file for correct execution of the program. Please, don't edit that file manually.
+			</div>
+		</div>
+	</div>
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#flush-prodThree" aria-expanded="false" aria-controls="flush-prodThree">
+				How to see detailed information for item?
+			</button>
+		</h2>
+		<div id="flush-prodThree" class="accordion-collapse collapse" data-bs-parent="#productsAccordion">
+			<div class="accordion-body">
+				To get more information - press button "More". Pop-up will appear with all information about item.
+			</div>
+		</div>
+	</div>
+</div>
 
 <h5>File interactions</h5>
+
+<div class="accordion accordion-flush">
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+				How to get file with all data?
+			</button>
+		</h2>
+		<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+			<div class="accordion-body">
+				To get file - press button "Save" and select folder and set the name for the file. 
+				<br />After that open folder and there would be YourName.json file.
+			</div>
+		</div>
+	</div>
+	<div class="accordion-item">
+		<h2 class="accordion-header">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+				How to import file with data?
+			</button>
+		</h2>
+		<div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+			<div class="accordion-body">
+				Only file created by using button "Save" can be imported to the program.
+				<br />To import file - press button "Upload" and select needed file.
+			</div>
+		</div>
+	</div>
+</div>
