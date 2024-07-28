@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Components.WebView.WindowsForms;
+﻿using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
-using SharedClassLib;
-using SharedClassLib.Data;
-using System.Windows.Forms;
+using SharedLib.Data;
+using SharedLib;
 
 namespace StorageManager
 {

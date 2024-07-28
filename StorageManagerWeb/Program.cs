@@ -1,5 +1,5 @@
-using SharedClassLib;
-using SharedClassLib.Data;
+using SharedLib;
+using SharedLib.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

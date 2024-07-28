@@ -5,9 +5,9 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageManager", "StorageManager\StorageManager.csproj", "{E69E2227-20A1-4BFB-BC39-FF41D080D7EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedClassLib", "SharedClassLib\SharedClassLib.csproj", "{B158E5B5-5C80-429F-84BB-F014EEFB0D73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLib", "SharedLib\SharedLib.csproj", "{B158E5B5-5C80-429F-84BB-F014EEFB0D73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageManagerWeb", "StorageManagerWeb\StorageManagerWeb.csproj", "{C6355B06-81DB-421C-B1AE-4AD2B79D711C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageManagerWeb", "StorageManagerWeb\StorageManagerWeb.csproj", "{E5CE9D16-8ED4-4204-9457-C6D0F066A763}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{B158E5B5-5C80-429F-84BB-F014EEFB0D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B158E5B5-5C80-429F-84BB-F014EEFB0D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B158E5B5-5C80-429F-84BB-F014EEFB0D73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6355B06-81DB-421C-B1AE-4AD2B79D711C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6355B06-81DB-421C-B1AE-4AD2B79D711C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6355B06-81DB-421C-B1AE-4AD2B79D711C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6355B06-81DB-421C-B1AE-4AD2B79D711C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5CE9D16-8ED4-4204-9457-C6D0F066A763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5CE9D16-8ED4-4204-9457-C6D0F066A763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5CE9D16-8ED4-4204-9457-C6D0F066A763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5CE9D16-8ED4-4204-9457-C6D0F066A763}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

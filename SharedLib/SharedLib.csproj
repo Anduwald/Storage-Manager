@@ -8,27 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\css\app.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\css\app.css" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Web.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-  </ItemGroup>
-
-
-
 </Project>

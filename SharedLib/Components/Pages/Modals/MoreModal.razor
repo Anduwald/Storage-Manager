@@ -13,7 +13,8 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="Close"></button>
 			</div>
 			<div class="modal-body">
-				<p>
+				<img class="@(BodyImage == string.Empty?"def-img": "")" src="@BodyImage" alt="Submarine image" />
+				<p class="mt-3">
 					@((MarkupString)Regex.Replace(@BodyText + "", "\n", "<br />"))
 				</p>
 			</div>
@@ -37,10 +38,29 @@
 	[Parameter]
 	public string? BodyText { get; set; }
 
-	public void Show(string bodyText, string headerText = "")
+	[Parameter]
+	public string? BodyImage { get; set; }
+
+	public void Show(string bodyText, string headerText = "", string bodyImageId = "")
 	{
 		HeaderText = headerText;
 		BodyText = bodyText;
+
+		string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"images\\{bodyImageId}.png");
+
+		if (File.Exists(imagePath))
+		{
+			byte[] imageBytes = File.ReadAllBytes(imagePath);
+
+			BodyImage = Convert.ToBase64String(imageBytes);
+			BodyImage = string.Format("data:image/png;base64,{0}", BodyImage);
+		}
+
+		else
+		{
+			BodyImage = string.Empty;
+		}
+
 		IsVisible = true;
 		StateHasChanged();
 	}
@@ -49,6 +69,7 @@
 	{
 		HeaderText = string.Empty;
 		BodyText = string.Empty;
+		BodyImage = string.Empty;
 		IsVisible = false;
 		StateHasChanged();
 	}

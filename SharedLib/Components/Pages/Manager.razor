@@ -1,8 +1,8 @@
-﻿@using SharedClassLib.Data
-@using SharedClassLib.Components.Pages.Modals
-@page "/manager"
+﻿@page "/manager"
 @inject DataController dataController
 @inject NavigationManager navigationManager
+@using SharedLib.Data
+@using SharedLib.Components.Pages.Modals
 
 <MoreModal @ref="moreModalRef" />
 
@@ -65,7 +65,7 @@ else
 					<td class="min">
 						<button class="btn btn-primary btn-sm me-1 mb-1" @onclick="()=>NavigateToEditItem(submarine.Id)">Edit</button>
 						<button class="btn btn-secondary btn-sm me-1 mb-1" @onclick="()=>ShowModalMore(submarine.Id)">More</button>
-						<button class="btn btn-danger btn-sm" @onclick="()=>DeleteItem(submarine.Id)">Delete</button>
+						<button class="btn btn-danger btn-sm mb-1" @onclick="()=>DeleteItem(submarine.Id)">Delete</button>
 					</td>
 				</tr>
 				current++;
@@ -93,14 +93,13 @@ else
 
 	protected override void OnInitialized()
 	{
-		pageCount = (int)Math.Ceiling(dataController.Submarines.Count / (double)linesPerPage);
-		currentPage = ValidateCPage(AppState.RemberPage);
+		CountPages(AppState.RemberPage);
 	}
 
-	private void CountPages()
+	private void CountPages(int validateNumber)
 	{
 		pageCount = (int)Math.Ceiling(dataController.Submarines.Count / (double)linesPerPage);
-		currentPage = ValidateCPage(currentPage);
+		currentPage = ValidateCPage(validateNumber);
 	}
 
 	private int ValidateCPage(int value)
@@ -123,17 +122,13 @@ else
 		currentPage = ValidateCPage(currentPage);
 	}
 
-	private void ShowModalMessage()
-	{
-		moreModalRef.Show("Popup body text");
-	}
-
 	private void ShowModalMore(int id)
 	{
 		Submarine submarine = dataController.Submarines.Single(e => e.Id == id);
 		string modalBody = submarine.GetDataStr();
-		string modalTitle = $"Submarine - {submarine.Name}";
-		moreModalRef.Show(modalBody, modalTitle);
+		string modalTitle = submarine.Name;
+		string modalImageId = submarine.ImageId.ToString();
+		moreModalRef.Show(modalBody, modalTitle, modalImageId);
 	}
 
 	private void ImportDataFromFile()
@@ -144,7 +139,7 @@ else
 		string jsonString = FileManager.LoadData(filePath);
 
 		dataController.ImportDataFromJson(jsonString);
-		CountPages();
+		CountPages(currentPage);
 	}
 
 	private void ExportDataToFile()
@@ -159,7 +154,7 @@ else
 	private void DeleteItem(int id)
 	{
 		dataController.DeleteSubmarine(id);
-		CountPages();
+		CountPages(currentPage);
 	}
 
 	private void NavigateToAddNewItem()

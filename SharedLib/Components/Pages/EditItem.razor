@@ -1,0 +1,188 @@
+@page "/manager/editItem/{Id::int}"
+@inject DataController dataController
+@inject NavigationManager navigationManager
+
+<PageTitle>Edit Item</PageTitle>
+
+<div class="flex-row mb-3">
+	<h1 class="m-0 me-3">Edit Item</h1>
+</div>
+
+<div class="flex-col my-3 input-block">
+	<label class="mb-3">
+		Name:
+		<InputText class="form-control form-control-sm" @bind-Value="item.Name" />
+	</label>
+
+	<label class="mb-3">
+		Country:
+		<select class="form-select form-select-sm" id="countryInput" @bind="@item.Country">
+			<option value="" selected disabled hidden>Select a country</option>
+			@foreach (string country in AppState.CountryList.OrderBy(x => x).ToList())
+			{
+				<option value="@country">@country</option>
+			}
+		</select>
+	</label>
+
+	<div>
+		<label>
+			Length:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.Length" id="lenInput"
+				   oninput="validate('lenInput', @minSize, @maxSize)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minSize m; Max - @maxSize m;
+	</div>
+
+	<div>
+		<label>
+			Width:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.Width" id="widthInput"
+				   oninput="validate('widthInput', @minSize, @maxSize)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minSize m; Max - @maxSize m;
+	</div>
+
+	<div>
+		<label>
+			Displacement:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.Displacement" id="dispInput"
+				   oninput="validate('dispInput', @minDisplacement, @maxDisplacement)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minDisplacement Tons; Max - @maxDisplacement Tons;
+	</div>
+
+	<div>
+		<label>
+			Diving depth:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.Depth" id="depthInput"
+				   oninput="validate('depthInput', @minDepth, @maxDepth)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minDepth m; Max - @maxDepth m;
+	</div>
+
+	<label class="mb-3">
+		Engine type:
+		<select class="form-select form-select-sm" id="engineTypeInput" @bind="@item.EngineType">
+			<option value="" selected disabled hidden>Select an engine type</option>
+			@foreach (string engineType in AppState.EngineTypeList.OrderBy(x => x).ToList())
+			{
+				<option value="@engineType">@engineType</option>
+			}
+		</select>
+	</label>
+
+	<label class="mb-3">
+		Armament:
+		<InputText class="form-control form-control-sm" @bind-Value="item.Armament" />
+	</label>
+
+	<div>
+		<label>
+			Underwater endurance:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.UnderwaterTime" id="timeInput"
+				   oninput="validate('timeInput', @minUnderwaterTime, @maxUnderwaterTime)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minUnderwaterTime days; Max - @maxUnderwaterTime days;
+	</div>
+
+	<div>
+		<label>
+			Price:
+			<input class="form-control form-control-sm" type="number" @bind-value="@item.Price" id="pInput"
+				   oninput="validate('pInput', @minPrice, @maxPrice)" />
+		</label>
+	</div>
+	<div class="d-flex mb-2 valid-text">
+		Min - @minPrice $; Max - @maxPriceStr $;
+	</div>
+
+	<div>
+		Upload a submarine image:
+		<a class="btn btn-outline-secondary btn-sm" @onclick="UploadNewImage">Upload Image</a>
+		<div class="@(uploadStatusText == "Image uploaded successfully."?"text-success":"text-danger")">@uploadStatusText</div>
+	</div>
+</div>
+
+<div class="flex-row my-3">
+	<a class="btn btn-primary" @onclick="SaveItem">Save</a>
+	<a class="btn btn-danger ms-3" href="manager">
+		Cancel
+	</a>
+</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; } = -1;
+
+	private Submarine item = new();
+
+	private int minSize = AppState.MinSize;
+	private int maxSize = AppState.MaxSize;
+
+	private int minDisplacement = AppState.MinDisplacement;
+	private int maxDisplacement = AppState.MaxDisplacement;
+
+	private int minDepth = AppState.MinDepth;
+	private int maxDepth = AppState.MaxDepth;
+
+	private int minUnderwaterTime = AppState.MinUnderwaterTime;
+	private int maxUnderwaterTime = AppState.MaxUnderwaterTime;
+
+	private double minPrice = AppState.MinPrice;
+	private double maxPrice = AppState.MaxPrice;
+	private string maxPriceStr = AppState.MaxPrice.ToString("N");
+
+	private string uploadStatusText = "";
+
+	protected override void OnInitialized()
+	{
+		maxPriceStr = maxPrice.ToString("N");
+		Submarine temp = dataController.Submarines.Single(e => e.Id == Id);
+		item = new(temp);
+	}
+
+	private void SaveItem()
+	{
+		dataController.UpdateSubmarine(Id, item);
+
+		NavigateToManager();
+	}
+
+	private void NavigateToManager()
+	{
+		navigationManager.NavigateTo("manager");
+	}
+
+	private void UploadNewImage()
+	{
+		string filePath = dataController.SelectFile();
+
+		int imageId = item.ImageId;
+
+		if (imageId == -1)
+		{
+			imageId = dataController.ImageIdCount;
+			dataController.IncreaseImageIdCount();
+			item.ImageId = imageId;
+		}
+
+		bool uploadStatus = FileManager.CopyImage(filePath, imageId);
+
+		if (uploadStatus)
+		{
+			uploadStatusText = "Image uploaded successfully.";
+		}
+		else { uploadStatusText = "Failed to upload. Select another image."; }
+	}
+}
